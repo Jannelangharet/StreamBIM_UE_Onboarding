@@ -161,7 +161,8 @@ async function callApi(method, ...args) {
   return fn.apply(window.StreamBIM.API, args);
 }
 
-function apiRoot() { return `/pgw/project-${state.projectId}/api/v1/v2`; }
+// Administrative endpoints use the project route captured in StreamBIM's own UI.
+function apiRoot() { return `/project-${state.projectId}/api/v1/v2`; }
 
 async function request(endpoint, options = {}) {
   const method = options.method || "GET";
@@ -366,7 +367,7 @@ async function loadContext() {
   state.projectId = clean(projectId); state.buildingId = clean(buildingId); state.userEmail = clean(userEmail);
   if (!state.projectId) throw new Error("StreamBIM returnerade inget projekt-ID.");
   elements.projectId.textContent = state.projectId; elements.buildingId.textContent = state.buildingId || "–"; elements.userEmail.textContent = state.userEmail || "–";
-  elements.apiPath.textContent = `/pgw/project-${state.projectId}`;
+  elements.apiPath.textContent = `/project-${state.projectId}`;
   elements.connectionDetail.textContent = `Projekt ${state.projectId} · ${state.userEmail}`;
 }
 

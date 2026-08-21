@@ -15,4 +15,6 @@ Widgeten kan:
 
 Alla skrivande åtgärder kräver att användaren aktiverar skrivläge och bekräftar varje steg. Åtgärderna körs med den aktuella StreamBIM-användarens behörigheter via `connectToParent` och `makeApiRequest`.
 
+Administrationsanropen använder StreamBIM-klientens projektväg `/project-{projectId}/api/v1/v2` enligt den verifierade HAR-kedjan. `/pgw/project-{projectId}` används inte för dessa endpoints.
+
 `PATCH` är inte listat bland de dokumenterade metoderna för `makeApiRequest` och testas därför explicit i separata steg.
