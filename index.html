@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>UE Startklar | StreamBIM onboarding</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="site-grid" aria-hidden="true"></div>
+    <main class="app-shell">
+      <header class="hero">
+        <div class="brand-mark" aria-label="UE Startklar">
+          <span class="brand-star">✦</span>
+          <span>UE / STARTKLAR</span>
+        </div>
+        <div class="hero-copy">
+          <p class="kicker">StreamBIM onboardingverktyg</p>
+          <h1>Bygg åtkomsten.<br /><span>Steg för steg.</span></h1>
+          <p class="lead">
+            Skapa projektgrupp, mapp, workflow och checklista för en underentreprenör.
+            Varje åtgärd körs separat och lämnar ett tydligt API-spår.
+          </p>
+        </div>
+        <div class="connection-card">
+          <div class="pulse-dot" id="connection-dot"></div>
+          <div>
+            <strong id="connection-label">Ansluter till StreamBIM</strong>
+            <span id="connection-detail">Väntar på parent-fönstret</span>
+          </div>
+          <button id="refresh-context" class="icon-button" type="button" title="Ladda om projektinfo">↻</button>
+        </div>
+      </header>
+
+      <section class="context-strip" aria-label="Projektkontext">
+        <div><span>Projekt</span><strong id="project-id">–</strong></div>
+        <div><span>Byggnad</span><strong id="building-id">–</strong></div>
+        <div><span>Användare</span><strong id="user-email">–</strong></div>
+        <div><span>API-väg</span><strong id="api-path">–</strong></div>
+      </section>
+
+      <section class="workspace-grid">
+        <aside class="setup-panel panel">
+          <div class="section-number">01</div>
+          <div class="section-heading">
+            <p class="kicker">Konfiguration</p>
+            <h2>Namn och mallar</h2>
+          </div>
+
+          <label class="field wide-field">
+            <span>Gemensamt basnamn</span>
+            <div class="field-with-action">
+              <input id="base-name" value="_TEST" autocomplete="off" />
+              <button id="apply-base-name" class="small-button" type="button">Använd på alla</button>
+            </div>
+          </label>
+
+          <div class="form-grid">
+            <label class="field">
+              <span>Gruppnamn</span>
+              <input id="group-name" value="_TEST" autocomplete="off" />
+            </label>
+            <label class="field">
+              <span>Mappnamn</span>
+              <input id="folder-name" value="_TEST" autocomplete="off" />
+            </label>
+            <label class="field">
+              <span>Workflow-namn</span>
+              <input id="workflow-name" value="_TEST" autocomplete="off" />
+            </label>
+            <label class="field">
+              <span>Checklistnamn</span>
+              <input id="checklist-name" value="_TEST" autocomplete="off" />
+            </label>
+            <label class="field">
+              <span>Organisation för grupp</span>
+              <input id="organization" value="" placeholder="Identifieras automatiskt" autocomplete="off" />
+            </label>
+            <label class="field">
+              <span>Workflow-mallens ID</span>
+              <input id="source-workflow-id" value="1078" inputmode="numeric" />
+            </label>
+            <label class="field">
+              <span>Checklistmallens ID</span>
+              <input id="source-checklist-id" value="38" inputmode="numeric" />
+            </label>
+            <label class="field">
+              <span>Överordnad mapp</span>
+              <input id="parent-folder-id" value="0" inputmode="numeric" />
+            </label>
+            <label class="field">
+              <span>Mappens access-level</span>
+              <input id="folder-access-level" value="10" inputmode="numeric" />
+            </label>
+          </div>
+
+          <label class="safety-check">
+            <input id="write-enabled" type="checkbox" />
+            <span>
+              <strong>Aktivera skrivande test</strong>
+              Jag förstår att knapparna skapar eller ändrar data i det aktiva StreamBIM-projektet.
+            </span>
+          </label>
+
+          <div class="setup-actions">
+            <button id="check-names" class="primary-button" type="button" disabled>Kontrollera namn</button>
+            <button id="reset-session" class="text-button" type="button">Nollställ sparade ID:n</button>
+          </div>
+        </aside>
+
+        <section class="steps-panel panel">
+          <div class="section-number">02</div>
+          <div class="section-heading steps-heading">
+            <div>
+              <p class="kicker">Provisionering</p>
+              <h2>Kör ett steg i taget</h2>
+            </div>
+            <span class="counter-pill"><strong id="completed-count">0</strong>/8 klara</span>
+          </div>
+
+          <div class="step-list">
+            <article class="step-card" data-step="group">
+              <div class="step-index">01</div>
+              <div class="step-copy"><h3>Skapa grupp</h3><p>Skapar eller återanvänder gruppen med valt namn.</p><code id="group-result">Ej körd</code></div>
+              <button id="create-group" class="step-button" type="button" disabled>Skapa grupp</button>
+            </article>
+            <article class="step-card" data-step="member">
+              <div class="step-index">02</div>
+              <div class="step-copy"><h3>Lägg till gruppadmin</h3><p>Lägger till aktuell användare som administratör.</p><code id="member-result">Kräver grupp</code></div>
+              <button id="add-member" class="step-button" type="button" disabled>Lägg till mig</button>
+            </article>
+            <article class="step-card" data-step="folder">
+              <div class="step-index">03</div>
+              <div class="step-copy"><h3>Skapa mapp</h3><p>Skapar eller återanvänder mappen under vald parent.</p><code id="folder-result">Ej körd</code></div>
+              <button id="create-folder" class="step-button" type="button" disabled>Skapa mapp</button>
+            </article>
+            <article class="step-card" data-step="folderAccess">
+              <div class="step-index">04</div>
+              <div class="step-copy"><h3>Sätt mappbehörighet</h3><p>Kopplar gruppen till mappen med vald access-level.</p><code id="folder-access-result">Kräver grupp + mapp</code></div>
+              <button id="grant-folder-access" class="step-button" type="button" disabled>Sätt behörighet</button>
+            </article>
+            <article class="step-card" data-step="workflow">
+              <div class="step-index">05</div>
+              <div class="step-copy"><h3>Kopiera workflow</h3><p>Kopierar angiven workflow-mall.</p><code id="workflow-result">Ej körd</code></div>
+              <button id="copy-workflow" class="step-button" type="button" disabled>Kopiera workflow</button>
+            </article>
+            <article class="step-card experimental" data-step="workflowAccess">
+              <div class="step-index">06</div>
+              <div class="step-copy"><h3>Namn + workflowåtkomst</h3><p>Testar PATCH och lägger gruppen i general-access.</p><code id="workflow-access-result">Kräver grupp + workflow</code></div>
+              <button id="grant-workflow-access" class="step-button" type="button" disabled>Sätt åtkomst</button>
+            </article>
+            <article class="step-card" data-step="checklist">
+              <div class="step-index">07</div>
+              <div class="step-copy"><h3>Kopiera checklista</h3><p>Skapar draft från checklistmallen och fångar dess workflow-ID.</p><code id="checklist-result">Ej körd</code></div>
+              <button id="copy-checklist" class="step-button" type="button" disabled>Kopiera checklista</button>
+            </article>
+            <article class="step-card experimental" data-step="checklistPublish">
+              <div class="step-index">08</div>
+              <div class="step-copy"><h3>Åtkomst + publicering</h3><p>Ger gruppåtkomst på checklistans workflow och publicerar checklistan.</p><code id="checklist-publish-result">Kräver grupp + checklista</code></div>
+              <button id="publish-checklist" class="step-button" type="button" disabled>Slutför checklista</button>
+            </article>
+          </div>
+          <p class="experimental-note"><span></span> Markerade steg använder PATCH, som behöver verifieras i er StreamBIM-miljö.</p>
+        </section>
+      </section>
+
+      <section class="log-panel panel">
+        <div class="section-number">03</div>
+        <div class="section-heading log-heading">
+          <div><p class="kicker">Teknisk logg</p><h2>Allt som händer</h2></div>
+          <div class="log-actions">
+            <button id="copy-log" class="small-button" type="button">Kopiera logg</button>
+            <button id="download-log" class="small-button" type="button">Ladda ner JSON</button>
+            <button id="clear-log" class="text-button" type="button">Rensa</button>
+          </div>
+        </div>
+        <div id="status-message" class="status-message">Widgeten startar…</div>
+        <div id="debug-log" class="debug-log" aria-live="polite"></div>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>
